@@ -1,0 +1,7 @@
+Crime_Records = LOAD 'USA_Crime.csv' USING PigStorage(',') AS (ID:long, CaseNo:chararray, DatenTime:chararray, Block:chararray, IUCR:int, PrimaryType:chararray, Description:chararray, Location:chararray, Arrest:chararray, Domestic:chararray, Beat:int, District:int, Ward:int, CommunityArea:chararray, FBICode:chararray, XCoordinate:float, YCoordinate:float, Year:int, UpdatedOnTime:chararray, Latitude:double, Longitude:double, GeoLocation:chararray) ;
+Crime_Selected = FOREACH Crime_Records GENERATE ID, FBICode ;
+Crime_Filtered = FILTER Crime_Selected BY FBICode == '32' ;
+Crime_Grouped  = GROUP Crime_Filtered BY FBICode ;
+Crime_Count_FBICode = FOREACH Crime_Grouped GENERATE group, COUNT(Crime_Filtered.ID) ;
+DUMP Crime_Count_FBICode ;
+
